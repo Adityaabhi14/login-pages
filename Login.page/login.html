@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>StudentHub — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="page-overlay" aria-hidden="true"></div>
+
+  <main class="page" role="main">
+    <section class="login-card" aria-labelledby="loginTitle" role="region">
+      <div class="card-content">
+        <h1 id="loginTitle" class="welcome">Welcome Back</h1>
+        <p class="subtitle">Sign in to continue to StudentHub</p>
+
+        <button class="btn" type="button" aria-label="Continue with Google">
+          <span class="g-icon" aria-hidden="true"></span>
+          Continue with Google
+        </button>
+
+        <div class="divider"><span>or</span></div>
+
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <input id="email" type="email" name="email" placeholder="name@example.com" aria-label="Email address" required>
+          </div>
+
+          <div class="field">
+            <input id="password" type="password" name="password" placeholder="Password" aria-label="Password" required>
+            <button type="button" class="toggle-pw" aria-label="Show password" title="Show password">Show</button>
+          </div>
+
+          <button type="submit" class="primary" aria-label="Sign in">Sign in</button>
+        </form>
+
+        <div class="links" aria-hidden="false">
+          <a href="#" title="Forgot password">Forgot password?</a>
+          <a href="#" id="createAccountLink" title="Create an account">Create account</a>
+
+        </div>
+      </div>
+    </section>
+  </main>
+<div id="signupModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="signupTitle">
+  <div class="modal-panel" role="document">
+    <button class="modal-close" aria-label="Close signup form">&times;</button>
+    <h2 id="signupTitle">Create account</h2>
+    <p class="modal-sub">Create a StudentHub account to join classes and share.</p>
+
+    <form id="signupForm" novalidate>
+      <div class="modal-row">
+        <label>Full name <input name="fullname" id="su_fullname" type="text" placeholder="John Doe" required></label>
+      </div>
+
+      <div class="modal-row">
+        <label>Display name <input name="displayname" id="su_displayname" type="text" placeholder="John"></label>
+      </div>
+
+      <div class="modal-row">
+        <label>Gmail <input name="email" id="su_email" type="email" placeholder="student@gmail.com" required></label>
+      </div>
+
+      <div class="modal-row">
+        <label>Phone <input name="phone" id="su_phone" type="tel" placeholder="+91 98765 43210" required></label>
+      </div>
+
+      <div class="modal-row">
+        <label>Address <input name="address" id="su_address" type="text" placeholder="City, State, Country" required></label>
+      </div>
+
+      <div class="modal-row">
+        <label>Password <input name="password" id="su_password" type="password" placeholder="Create a password" required></label>
+      </div>
+
+      <div class="modal-rows-actions">
+        <button type="submit" class="primary signup-submit">Create account</button>
+        <button type="button" class="btn signup-cancel">Cancel</button>
+      </div>
+    </form>
+
+    <div class="modal-note">By creating an account you agree to our Terms.</div>
+  </div>
+</div>
+  <script>
+(function () {
+  /* ---------- helpers ---------- */
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+  function isEmailValid(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function clearInlineErrors(container = document) {
+    $$(container + ' .ui-error').forEach(n => n.remove());
+    $$('#email, #password, #su_email, #su_password').forEach(i => i && i.removeAttribute('aria-invalid'));
+  }
+
+  function showInlineError(message, fieldEl) {
+    const parent = (typeof fieldEl === 'string') ? $(fieldEl).parentElement : (fieldEl && fieldEl.parentElement);
+    if (!parent) {
+      const f = $('#loginForm');
+      if (f) {
+        const err = document.createElement('div');
+        err.className = 'ui-error';
+        err.textContent = message;
+        f.prepend(err);
+      }
+      return;
+    }
+    parent.querySelectorAll('.ui-error').forEach(n => n.remove());
+    const err = document.createElement('div');
+    err.className = 'ui-error';
+    err.textContent = message;
+    parent.appendChild(err);
+    const input = parent.querySelector('input');
+    if (input) {
+      input.setAttribute('aria-invalid', 'true');
+      input.focus();
+    }
+  }
+
+  const toggle = document.querySelector('.toggle-pw');
+  const pwd = document.getElementById('password');
+  if (toggle && pwd) {
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      const showing = pwd.type === 'text';
+      pwd.type = showing ? 'password' : 'text';
+      toggle.textContent = showing ? 'Show' : 'Hide';
+      toggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+      toggle.setAttribute('aria-pressed', String(!showing));
+      toggle.focus();
+    });
+  }
+
+  const googleBtn = document.querySelector('.btn');
+  if (googleBtn) {
+    googleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('Google sign-in clicked — implement OAuth redirect.');
+      alert('Google login not wired in demo. Implement OAuth redirect to your backend.');
+    });
+  }
+  const createLink = document.getElementById('createAccountLink');
+  if (createLink) {
+    createLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const modal = document.getElementById('signupModal');
+      if (!modal) {
+        console.log('Create account clicked, but signup modal not found.');
+        alert('Create account flow not present. Add signup modal markup or link to signup page.');
+        return;
+      }
+      modal.setAttribute('aria-hidden', 'false');
+      const firstInput = modal.querySelector('input');
+      setTimeout(() => firstInput && firstInput.focus(), 80);
+    });
+  }
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      clearInlineErrors('#loginForm');
+
+      const emailEl = document.getElementById('email');
+      const passEl = document.getElementById('password');
+      const email = emailEl?.value?.trim() || '';
+      const password = passEl?.value || '';
+
+      if (!email) { showInlineError('Please enter your email address.', emailEl); return; }
+      if (!isEmailValid(email)) { showInlineError('Please enter a valid email address.', emailEl); return; }
+      if (!password) { showInlineError('Please enter your password.', passEl); return; }
+      if (password.length < 6) { showInlineError('Password must be at least 6 characters.', passEl); return; }
+
+      // UX: show temporary loading state (simple)
+      const submitBtn = loginForm.querySelector('.primary');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Signing in…';
+        submitBtn.setAttribute('aria-busy', 'true');
+
+        setTimeout(() => {
+
+          console.log('Demo login:', { email, password });
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          submitBtn.removeAttribute('aria-busy');
+
+          alert('Demo: login validated client-side. Hook up backend to proceed.');
+        }, 900);
+      } else {
+        console.log('Demo login values:', { email, password });
+      }
+    });
+  }
+
+
+  const signupModal = document.getElementById('signupModal');
+  if (signupModal) {
+
+    const closeBtn = signupModal.querySelector('.modal-close');
+    const cancelBtn = signupModal.querySelector('.signup-cancel');
+    function closeModal() {
+      signupModal.setAttribute('aria-hidden', 'true');
+    }
+    if (closeBtn) closeBtn.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
+    if (cancelBtn) cancelBtn.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
+
+
+    signupModal.addEventListener('click', (ev) => {
+      if (ev.target === signupModal) closeModal();
+    });
+
+
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape' && signupModal.getAttribute('aria-hidden') === 'false') closeModal();
+    });
+
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+      signupForm.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+
+        $$('#signupModal .ui-error').forEach(n => n.remove());
+
+        const fullname = (document.getElementById('su_fullname')?.value || '').trim();
+        const displayname = (document.getElementById('su_displayname')?.value || '').trim();
+        const suemail = (document.getElementById('su_email')?.value || '').trim();
+        const suphone = (document.getElementById('su_phone')?.value || '').trim();
+        const suaddr = (document.getElementById('su_address')?.value || '').trim();
+        const supwd = (document.getElementById('su_password')?.value || '');
+
+        if (!fullname) { showInlineError('Please enter your full name.', document.getElementById('su_fullname')); return; }
+        if (!suemail || !isEmailValid(suemail)) { showInlineError('Please enter a valid email.', document.getElementById('su_email')); return; }
+        if (!suphone || suphone.length < 7) { showInlineError('Please enter a valid phone number.', document.getElementById('su_phone')); return; }
+        if (!suaddr) { showInlineError('Please enter your address.', document.getElementById('su_address')); return; }
+        if (!supwd || supwd.length < 6) { showInlineError('Password must be at least 6 characters.', document.getElementById('su_password')); return; }
+        console.log('Demo signup payload:', { fullname, displayname, suemail, suphone, suaddr });
+        alert('Demo: signup validated client-side. Implement register API to create account.');
+       
+        closeModal();
+      });
+    }
+  }
+
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const em = document.getElementById('email');
+      em && em.focus();
+    }, 120);
+  });
+
+})();
+</script>
+
+</script>
+</body>
+</html>
