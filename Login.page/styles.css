@@ -263,3 +263,90 @@ input:focus{
 .modal-note { color: var(--muted); font-size:12px; margin-top:10px; }
 .modal .ui-error { margin-top:8px; color:#FCA5A5; font-size:13px; }
 @media (max-width:540px){ .modal-panel{ padding:16px; } .modal h2{ font-size:18px; } }
+/* ---------- SIGNUP FORM FIX ---------- */
+#signupForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+
+#signupForm .modal-row {
+  width: 100%;
+  max-width: 400px;   
+  display: flex;
+  flex-direction: column;
+}
+
+#signupForm label {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+
+#signupForm input {
+  width: 100%;
+  height: 46px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--white);
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#signupForm input::placeholder {
+  color: rgba(156, 163, 175, 0.7);
+}
+
+
+#signupForm input:focus {
+  border-color: rgba(59, 130, 246, 0.9);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+  outline: none;
+}
+
+
+#signupForm .ui-error {
+  font-size: 13px;
+  color: #FCA5A5;
+  margin-top: 4px;
+}
+
+
+.modal-rows-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 10px;
+}
+
+.modal-note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+
+.modal h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.modal-sub {
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
